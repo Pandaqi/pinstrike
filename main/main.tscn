@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bo21p72yjp0wm"]
+
+[ext_resource type="Script" uid="uid://wawg7byh3y7j" path="res://main/main.gd" id="1_53q0u"]
+[ext_resource type="Script" uid="uid://27j1tl3eylia" path="res://map/puzzle_visualizer.gd" id="2_3wy1v"]
+[ext_resource type="PackedScene" uid="uid://die3gvglqcngu" path="res://map/cells/cell.tscn" id="3_xwkvk"]
+[ext_resource type="Script" uid="uid://haho73xq30yv" path="res://puzzle-framework/tools/camera.gd" id="4_c651c"]
+
+[node name="Main" type="Node2D" unique_id=251134698 node_paths=PackedStringArray("vis", "cam")]
+script = ExtResource("1_53q0u")
+vis = NodePath("PuzzleVisualizer")
+cam = NodePath("PuzzleCamera")
+
+[node name="PuzzleVisualizer" type="Node2D" parent="." unique_id=708301961]
+script = ExtResource("2_3wy1v")
+cell_scene = ExtResource("3_xwkvk")
+
+[node name="PuzzleCamera" type="Camera2D" parent="." unique_id=865078962]
+script = ExtResource("4_c651c")
+metadata/_custom_type_script = "uid://haho73xq30yv"

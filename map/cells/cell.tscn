@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://die3gvglqcngu"]
+
+[ext_resource type="Script" uid="uid://bp05vtd5hhtey" path="res://map/cells/cell.gd" id="1_kshm1"]
+[ext_resource type="PackedScene" uid="uid://i5j3qpcvjfkd" path="res://map/pins/pin.tscn" id="2_glfqj"]
+[ext_resource type="Texture2D" uid="uid://io301w4dci3p" path="res://icon.svg" id="3_n6jdi"]
+
+[node name="Cell" type="Node2D" unique_id=432978806 node_paths=PackedStringArray("sprite", "pin_container")]
+script = ExtResource("1_kshm1")
+sprite = NodePath("Sprite2D")
+pin_container = NodePath("PinContainer")
+pin_scene = ExtResource("2_glfqj")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2062583227]
+modulate = Color(1, 0.6039216, 1, 1)
+texture = ExtResource("3_n6jdi")
+
+[node name="PinContainer" type="Node2D" parent="." unique_id=1891405577]

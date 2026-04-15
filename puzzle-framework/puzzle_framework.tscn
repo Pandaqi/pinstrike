@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bqhtxrn1r54m3"]
+
+[ext_resource type="Script" uid="uid://kme3xvun4gc4" path="res://puzzle-framework/puzzle_framework.gd" id="1_57jsw"]
+[ext_resource type="Resource" uid="uid://bkrbxf83mnm1x" path="res://generation/difficulties/diff_easiest.tres" id="2_swsbt"]
+[ext_resource type="Script" uid="uid://7a03fervi8xj" path="res://puzzle-framework/puzzle_difficulty.gd" id="3_tgv6f"]
+
+[node name="PuzzleFramework" type="Node" unique_id=835186744]
+script = ExtResource("1_57jsw")
+game_name = "Chirpy Sorty"
+game_version = "1.6.9"
+game_tagline = "Teaches Comparing, Grouping, Sequencing & Sorting"
+menu_pattern_enabled = true
+difficulties = Array[ExtResource("3_tgv6f")]([ExtResource("2_swsbt")])
