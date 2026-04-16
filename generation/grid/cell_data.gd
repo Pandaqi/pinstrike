@@ -46,6 +46,7 @@ static var direction_to_vector : Dictionary[Direction,Vector2i] = {
 }
 
 var neighbor_pins_pointed_at_us := 0
+var lane_is_empty := false
 
 func has_pin_at(dir:Direction) -> bool:
 	return get_pin_at(dir) != PinType.NONE
@@ -57,11 +58,13 @@ func get_pin_at(dir:Direction) -> PinType:
 func add_pin(tp:PinType, dir:Direction) -> void:
 	pins.append(tp)
 	pins_by_direction[dir] = tp
+	changed.emit()
 
 func remove_pin(dir:Direction) -> void:
 	var tp := pins_by_direction[dir]
 	pins_by_direction[dir] = PinType.NONE
 	pins.erase(tp)
+	changed.emit()
 
 func count() -> int:
 	return pins.size()
@@ -85,7 +88,7 @@ func get_opposite_neighbor(dir:Direction) -> CellData:
 func get_pin_on_opposite_neighbor(dir:Direction) -> PinType:
 	var nb := get_opposite_neighbor(dir)
 	if not nb: return PinType.NONE
-	return nb.get_pin_at(get_dir_opposite_to(dir))
+	return nb.get_pin_at(dir)
 
 func calculate_neighbor_data() -> void:
 	neighbors_by_direction = {}
@@ -100,3 +103,8 @@ func calculate_neighbor_pins() -> void:
 		if get_pin_on_opposite_neighbor(dir) == PinType.NONE: continue
 		sum += 1
 	neighbor_pins_pointed_at_us = sum
+
+# @TODO: could cache the is_empty() call on LaneData first to prevent recalculating all the time
+func calculate_lane_stats(lanes:Array[LaneData]) -> void:
+	lane_is_empty = lanes[pos.x].is_empty()
+	

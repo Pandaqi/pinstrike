@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PuzzleDifficulty" format=3 uid="uid://bwsppa17oe78m"]
+
+[ext_resource type="Script" uid="uid://7a03fervi8xj" path="res://puzzle-framework/puzzle_difficulty.gd" id="1_ukhl0"]
+[ext_resource type="Script" uid="uid://dbnf0revlghrs" path="res://puzzle-framework/tutorial/puzzle_tutorial_stage.gd" id="2_hirfs"]
+
+[resource]
+script = ExtResource("1_ukhl0")
+difficulty = 1
+properties = Dictionary[String, Variant]({
+"allow_diagonals": false,
+"ball_matches_pincount_remove_all": false,
+"ball_too_weak_does_nothing": false,
+"lane_length_bounds": Vector2i(2, 4),
+"num_lanes_bounds": Vector2i(3, 4),
+"num_turns_bounds": Vector2i(3, 6),
+"remove_pins_if_already_occupied": true
+})
+metadata/_custom_type_script = "uid://7a03fervi8xj"

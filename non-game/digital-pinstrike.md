@@ -13,40 +13,86 @@ Promising!
     * If it moves into another pin, they BOTH disappear? That's easiest for generation algorithm too ...
   * (The ball STOPS? It does not continue on to anything that's behind it? PROBABLY BEST)
   * Now you must simply clear the whole field!
-  * (EASY MODE = Can reduce it to only the orthogonal directions, for example. Add diagonals only later.)
 * EXPANSIONS:
   * Balls have _numbers_. If you hit a square with exactly that many, they all disappear. If you hit a square with _more_, it does nothing---an illegal move. You can only scatter squares with fewer pins than the ball number ( = strength/power/force/whatever)
 
-GENERATION ALGORITHM: 
 
-* We repeat the following random moves as often a we want/need.
-  * Pick a random lane and square. 
-  * Place _all_ possible pins there.
-  * Now scatter them according to the puzzle rules.
-  * Randomly decide to make them "disappear" by pretending there was a pin at the target location all along. (This pin CAN'T be earlier than the earliest "hit" on that lane, as it would've been hit on an earlier turn then.)
-* As we do this, 
-  * For each pin, track if it **influenced the puzzle** => At the end, we can just remove all pins (that weren't removed by the game's rules) that did nothing at all.
-  * For each lane, check the earliest "hit" ---> later hits/pin placements can only be _behind_ that.
+# Difficulties
+
+## Easiest
+
+num_lanes_bounds = (3,3)
+lane_length_bounds = (2,4)
+num_turns_bounds = (2,4)
+
+allow_diagonals = false
+remove_pins_if_already_occupied = false
+
+ball_too_weak_does_nothing = false
+ball_matches_pincount_remove_all = false
+
+@TODO: Maybe even limit number of pins on cells to 1 at most? So I can play a sound bite ("LEFT") depending on how each one scatters?
+---> Nah, I probably want a system to support multi scattering anyway, so it would put them all in a list and play one by one.
+---> Maybe the scattering animation can also be _one pin at a time_ for extra clarity?
 
 
-PERHAPS IT'S BETTER TO GO IN REVERSE! (A kind of "growths everywhere" algorithm.) Every step, we imagine "what changes do we need to make such that striking this space would _keep the state the same_?"
+## Easy
 
-* The board starts empty -> the WIN state, completely cleared.
-* Now repeat the following steps.
-  * Pick a random lane. Pick a random square, or the first square with pins inside (if any).
-  * If a side has _no pin_, and it would _scatter to the edge_, then you can place a pin there. (_Hitting this square will remove that pin._)
-  * If a side has _no pin_, otherwise, you _can_ place a pin there _and_ on the opposite side. (Only possible if the other side does not have one yet. If not possible, just do nothing.)
-  * If a side has _a pin_, and it would _scatter to the edge_, then you are simply NOT ALLOWED TO PICK THIS SQUARE. (_Hitting this square now would make that pin disappear, but it has to be there!_)
-  * If a side has _a pin_, otherwise, you have to remove it by placing a pin on the opposite side. (Only possible if the other side does not have one yet.)
+num_lanes_bounds = (3,4)
+lane_length_bounds = (3,5)
+num_turns_bounds = (3,6)
+
+allow_diagonals = false
+remove_pins_if_already_occupied = true
+
+ball_too_weak_does_nothing = false
+ball_matches_pincount_remove_all = false
+
+
+## Medium
+
+allow_diagonals = true
+remove_pins_if_already_occupied = true
+
+ball_too_weak_does_nothing = false
+ball_matches_pincount_remove_all = false
+
+
+## Hard
+
+allow_diagonals = true
+remove_pins_if_already_occupied = true
+
+ball_too_weak_does_nothing = false
+ball_matches_pincount_remove_all = true
+
+
+## Hardest
+
+
+ball_too_weak_does_nothing = true
+ball_matches_pincount_remove_all = true
+
+ball_keeps_going_after_hit = true?? (Or maybe it only keeps going if the ball was too weak for the first option?)
+
 
 
 
 
 ## To-Do
 
-BUGFIX: My "strike_cell" system is bad. Instead, we should just loop through all cells and calculate the FIRST and LAST index of cells with pins each time. (Because cells can receive pins on OTHER TURNS/STEPS of the generation, not just when they're the current move.)
+### Generation
 
-GEN IMPROVE: Prefer the ATTRACT growth options as they lead to harder/more interesting puzzles? -> They are basically NEVER happening right now, must be some bug with how I check neighbor pins?
-===> DUH, of course it never happens, because this situation NEVER OCCURS. Pins are only added at edges or in doubles, so there is NEVER an opportunity to attract right now! **How to fix?**
-  -> Could make these a type of pin that is allowed to stay on the field?
-  -> NO we need smarter rules. The current rules simply make it impossible for a pawn to "travel around the map", because it can only flip-flop in direction-oppositeDirection.
+@NOTE: Now it will never attract from BELOW, because it thinks cells behind it could never be reached. We can write a small little exception for this very specific case? Seems really hard actually ...
+
+IMPROV: Generation -> defend against "nothing turns" on Easiest difficulty. (WHY DO THEY HAPPEN AT ALL? It's always lane 0 that's doubled up or something I believe ...) SOMETHING IS GOING WRONG HERE
+
+### Visuals / Feedback
+
+* Make ORDER of directions handled (when animating pins) CONSISTENT (start at right/top and go clockwise)
+* During scatter of pin, play audio with name of direction (IF enabled in settings)
+* Make scatter rotate the pin (somewhat randomly). Faster too?
+* Only play appear/disappear tween of pins on `CommandRemove` and on level start/finish?
+
+
+* Display all balls (numbers and order) -> which also displays current turn/turns left. (Though we can add a number for that if we want.)

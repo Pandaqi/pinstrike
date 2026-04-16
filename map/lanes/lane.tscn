@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://daw0cdut7qban"]
+
+[ext_resource type="Script" uid="uid://d2oe56vsby4kn" path="res://map/lanes/lane.gd" id="1_4iofx"]
+[ext_resource type="PackedScene" uid="uid://die3gvglqcngu" path="res://map/cells/cell.tscn" id="2_kdyou"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kdyou"]
+
+[node name="Lane" type="Node2D" unique_id=1337726780 node_paths=PackedStringArray("area", "col_shape", "line_left", "line_right")]
+script = ExtResource("1_4iofx")
+cell_scene = ExtResource("2_kdyou")
+area = NodePath("Area2D")
+col_shape = NodePath("Area2D/CollisionShape2D")
+line_left = NodePath("Lines/LineLeft")
+line_right = NodePath("Lines/LineRight")
+
+[node name="Lines" type="Node2D" parent="." unique_id=1838657843]
+
+[node name="LineLeft" type="Line2D" parent="Lines" unique_id=279854088]
+width = 4.0
+default_color = Color(0, 0, 0, 1)
+
+[node name="LineRight" type="Line2D" parent="Lines" unique_id=704740004]
+width = 4.0
+default_color = Color(0, 0, 0, 1)
+
+[node name="Area2D" type="Area2D" parent="." unique_id=123456891]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2116456161]
+shape = SubResource("RectangleShape2D_kdyou")

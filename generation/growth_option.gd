@@ -19,6 +19,12 @@ func _init(tp:Type, c1:CellData, d1:CellData.Direction, c2:CellData = null, d2 :
 	cell_2 = c2
 	dir_2 = d2
 
+func is_attraction() -> bool:
+	return type == Type.ATTRACT
+
+func is_placement() -> bool:
+	return type == Type.PLACE
+
 func apply() -> void:
 	if type == Type.ATTRACT:
 		var pin_type := cell_2.get_pin_at(dir_2)
@@ -28,5 +34,5 @@ func apply() -> void:
 	# @TODO: How to allow selecting from range of options for PinTypes available in this puzzle?
 	if type == Type.PLACE:
 		cell_1.add_pin(CellData.PinType.REGULAR, dir_1)
-		if cell_2 and dir_2:
+		if cell_2:
 			cell_2.add_pin(CellData.PinType.REGULAR, dir_2)
