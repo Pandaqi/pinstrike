@@ -11,7 +11,7 @@ properties = Dictionary[String, Variant]({
 "ball_matches_pincount_remove_all": true,
 "ball_too_weak_does_nothing": false,
 "lane_length_bounds": Vector2i(3, 5),
-"num_lanes_bounds": Vector2i(4, 6),
+"num_lanes_bounds": Vector2i(4, 7),
 "num_turns_bounds": Vector2i(5, 10),
 "remove_pins_if_already_occupied": true
 })

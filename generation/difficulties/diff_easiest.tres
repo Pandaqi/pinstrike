@@ -9,9 +9,9 @@ properties = Dictionary[String, Variant]({
 "allow_diagonals": false,
 "ball_matches_pincount_remove_all": false,
 "ball_too_weak_does_nothing": false,
-"lane_length_bounds": Vector2i(2, 4),
+"lane_length_bounds": Vector2i(2, 2),
 "num_lanes_bounds": Vector2i(3, 3),
-"num_turns_bounds": Vector2i(2, 4),
+"num_turns_bounds": Vector2i(4, 5),
 "remove_pins_if_already_occupied": false
 })
 metadata/_custom_type_script = "uid://7a03fervi8xj"

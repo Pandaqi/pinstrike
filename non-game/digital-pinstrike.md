@@ -81,18 +81,51 @@ ball_keeps_going_after_hit = true?? (Or maybe it only keeps going if the ball wa
 
 ## To-Do
 
+### PuzzleFramework
+
+Move my improvement with `visualizer` attached to PuzzleCommands by default back to general system.
+
+
 ### Generation
 
-@NOTE: Now it will never attract from BELOW, because it thinks cells behind it could never be reached. We can write a small little exception for this very specific case? Seems really hard actually ...
+THINK ABOUT IF I REALLY DON'T WANT TO MAKE "MORE" OUT OF THIS. Whether numbers are introduced too late, perhaps. (+SHOULD we include 0??)
 
-IMPROV: Generation -> defend against "nothing turns" on Easiest difficulty. (WHY DO THEY HAPPEN AT ALL? It's always lane 0 that's doubled up or something I believe ...) SOMETHING IS GOING WRONG HERE
+**@IDEA:** Show numbers _on squares_. If you get _that many pins_ there, they are removed!
+
+* GENERATION = GrowthOption = Pick a number, place that many pins on the cell.
+* The only requirement now is that this cell is CHANGED at some point (something must _cause_ it to become that number and then remove everything)
+
 
 ### Visuals / Feedback
 
-* Make ORDER of directions handled (when animating pins) CONSISTENT (start at right/top and go clockwise)
+PINS:
+
+* Make outline of pins dynamic so I can make it always the same size (regardless of camera zoom in/out)?
+* Setting to allow random visual differentiation? (Just re-tinting pins randomly.)
+* Setting for "simultaneous scatter"? Or "instant scatter"?
+
+MENU/BACKGROUND: What to do for this?
+
+OTHER:
+
+* Create a variation for when `remove_pins_if_already_occupied` is false? In that case, it just does not move it/does not ALLOW it, or only removes the initial one?
+* Particles, SoundFX, feedback (especially on PERFECT HITS or BALL TOO WEAK)
 * During scatter of pin, play audio with name of direction (IF enabled in settings)
-* Make scatter rotate the pin (somewhat randomly). Faster too?
-* Only play appear/disappear tween of pins on `CommandRemove` and on level start/finish?
+* HOVER effect over lane you've currently selected for rolling
 
 
-* Display all balls (numbers and order) -> which also displays current turn/turns left. (Though we can add a number for that if we want.)
+### Future To-Do / Deluxe Version
+
+@NOTE: Now I do something funky with adding appear/disappear tweens on pins manually in the right places. I _should_ have just made a `CommandPinAdd` and `CommandPinRemove` and let _those_ handle both the logic and tweens ... 
+
+@NOTE: Now it will never attract from BELOW, because it thinks cells behind it could never be reached. We can write a small little exception for this very specific case? Seems really hard actually ... **forget about this for now**
+
+
+
+
+* Do "cascading scattering" ---> hitting an existing pin just makes _that_ pin scatter away too, and this sequence of events continues until nothing is hit anymore. (Often with the final scatter sending it off the edge.)
+  * HOW would you generate this, though?
+  * GROWTH OPTION: Create an entire _line_ of pins, all in the same direction, until the edge. (Instead of just double pins.) => NO THIS ISN'T ENOUGH. Because the original pin that started the cascade will still remain on that first square.
+* Allow ball to keep rolling after hit? Or maybe it only keeps going if the ball was too weak for the first option?
+* We might create _colored_ pins, which can only be hit by _balls_ of the same color. 
+* We might create different _types_ of pins. Some that can _only_ be removed at the edge, some that move in _reverse_ direction, etcetera.

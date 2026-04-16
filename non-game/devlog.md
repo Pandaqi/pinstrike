@@ -169,8 +169,118 @@ The first rule requires a fourth "growth option". Namely,
     * In that case, I make the number `#pins` + a random integer between 1 and 3. The number is higher, so the move is valid.
 * If so, place random pins, as many as we want. They'll just be removed anyway upon hitting them.
 
+## Making It Look Good
 
+One of the reasons I wanted to make this idea (instead of simpler ones from earlier topics in the curriculum), is because it provided a challenge in how to _visualize_ the puzzle. How to clearly _show_ these pins scattering away in the right direction, and being removed in certain cases? I hoped to learn a few more tricks from figuring this out.
 
+And I did :)
 
+Why is it so tricky?
 
+* When you click a lane, first a **ball should start rolling**. 
+* That ball should **stop at the first square with pins**.
+* Only _then_ should the pins scatter away: **play an animation moving them in the right direction**
+* And only _then_, once a pin has moved, should the **data behind the scenes be updated** to reflect this. 
+  * (If updated earlier then, for example, the pin on the neighbor cell will already be removed before the pin we hit even started moving towards it. It would simply mean that some things happen too early and it's weird, so we need to wait for it.)
 
+There are three main tricks that I found that made my final code or this system relatively simple.
+
+### Trick #1
+
+**Trick 1:** We don't actually move the pin that was hit. Instead, we make a **fake copy** and move that instead.
+
+Every cell has 9 pins inside it (one at each position). It simply hides/shows the right ones depending on its state. But those pins never leave their position---never leave their cell. That seems doable at first but quickly leads to all sorts of issues (both visually and with the logic).
+
+So, instead, I create a _new_ pin (at the same position, same size, etcetera). And I play a `Tween` to move _that fake pin_ from the original position to the new one. Now I can `await that_tween.finished`, and the code below that point only runs once the movement is done. In this case, it finally adds the pin to the data of the new cell. (It is now "officially" part of that next cell, which means it will display it, and I can remove the fake one.)
+
+In fact, I decided to animate one pin at a time. It's much clearer what happens (for the player) and prevents it being overwhelming when you hit a square with 3(+) pins flying away. That means I only need _one_ "fake pin" that I just keep around and re-use for every movement. 
+
+This one-at-a-time method also allows playing _audio_ saying the name of the direction, e.g. "LEFT!", to reinforce that too and increase educational value. If we don't do this, well, it would say LEFT! RIGHT! UP! all at the same time and it would sound like a mess :p
+
+### Trick #2
+
+At first, I also added a little "appear" and "disappear" animation to the pins. It just looks a lot nicer if things pop in and out of the game as opposed to them suddenly being gone (or appearing where they were not before!).
+
+Cells can simply check if they received any new pin, or if any has been removed, and play the animation accordingly each time.
+
+But ... this doesn't work with the system above. It would mean that ...
+
+* When the scattering starts, the real pin (in the cell) is _still visible_ as it's doing its disappear animation (takes ~0.2 seconds)
+* When the scattering ends, the fake pin arrives at the right location, destroys itself ... and we see nothing! Because it still takes ~0.2 seconds for the new pin (inside the new cell) to play its appear animation.
+
+To sell the illusion that we're moving that specific pin, it just has to be gone in an instant (replaced by the fake one). It looks confusing any other way.
+
+Okay, but what about every other situation in which a pin is added/removed? What about _undoing_? If we play the scatter animation in reverse, then undoing takes _reaally long_. And pins pop into existence without animation!
+
+So ...
+
+**Trick 2:** I seperated the visual effects for the DO and UNDO of commands. The DO is always a scatter of a pin, and it uses Trick #1 to sell the idea. The UNDO happens instantly behind the scenes, but all the pins that come back on the field play their little _appear_ animation. 
+
+This makes both actions look good. The UNDO is fast now, without instantly popping pins into existence but instead animating them.
+
+### Trick #3
+
+One main issue with puzzles like this is that you basically have two modes: _generating_ and _playing_. Ideally you want both to use the exact same code (the same _commands_). But ...
+
+* When generating, things should happen instantly.
+* When playing, things should be animated and wait for other things to complete (as explained above).
+
+How do we draw this distinction? How can we easily _access_ the visual part of the game if we need it, but not _require_ it? 
+
+In my command system, there's only a single parameter passed into every `do()` and `undo()` function: the commands manager. The thing remembering the history, able to undo the last turn, etcetera.
+
+I decided to add a built-in variable (`visualizer`) to this manager that holds a reference to the game world.
+
+Now, every command can use `manager.visualizer` to find the game objects connected to the puzzle data. _If it exists_, we can do simple calls like `manager.visualizer.play_scatter_tween(cell, direction)`. When generating instead of playing, that reference simply does not exist and the command skips those bits.
+
+The `await` keyword is vital here. It allows waiting for something to complete before continuing with the rest of the code.
+
+* When generating, we don't use any of that. Things happen instantly. Commands have no visual side effects.
+* When playing, we `await` the animations the visualizer creates for us.
+
+But what if a player already wants to do the next turn while animations are still happening? What if they click a new lane while the old one is still doing stuff?
+
+In many puzzle games, I simply **forbid this**.
+
+* When you do a new move, the commands manager sets `busy` to `true` ... and only sets it to `false` again once _everything_ is done and handled.
+* Now I can check `commands.is_busy()`
+* And if true, then we simply ignore the user input. (Optionally: tell them they can't move again yet.)
+
+With such strict visualization like in this game, it's just too convoluted to try and allow players to move instantly. You'd have to somehow force an "instant finish" of all scattering and animating left to do. 
+
+All I can do is make the animations _fast_. You never have to wait more than a few seconds before being able to take your next turn. (And, as stated, the UNDO is instant, to soften the issue even more.)
+
+In simpler puzzle games (at least visually) I usually _do_ allow this. My first puzzle games (like _Dwarfs & Giants_ and _Colorcross_) used this technique:
+
+* When you do something, the logic / data change for it always _happens instantly_. (Moving something? Behind the scenes it has _teleported_, instantly there.)
+* The animation that plays is just for show---nothing awaits it, nothing depends on it. (Moving something? Play an animation to make it get there at _some point_. It doesn't matter if you already do your next move while it's busy.)
+* In such cases it is _fine_ if you click while an animation is still busy, because the data was already up-to-date behind the scenes and so nothing will go wrong.
+
+### Anything Else?
+
+As usual, "finishing" or "polishing" the game took twice as long as coding the entire logic/algorithm. But there's nothing interesting to say about that. It's about adding basic sound effects, a few images for pins/ball, some minor animations and particles just for show, and some "quality of life" features/settings to tweak. (Such as turning _off_ the audio of the direction in case you're annoyed by it or don't need it.)
+
+I always envisioned this game as a pure black-and-white, really minimalist, bowling puzzle. This obviously cuts down the time spend on the visuals, as well as the likelihood of doing something unique that's worth talking about.
+
+## Conclusion
+
+And that's it!
+
+As usual, it's not some ground-breaking puzzle game you want to play forever. But it's a _good_ puzzle game with five nicely scaling difficulty levels. It has a very unique theme, look, and core mechanic. And it's tightly focused on the few educational topics it wants to breach, partially thanks to its more minimalist look.
+
+(This also marks it as the first puzzle game to be both Level 1 and Level 2. Directions is level 1; Numbers is level 2. But I obviously hope to have many more puzzles of that kind soon, so this isn't that special.)
+
+The harder difficulties provide a nice puzzle for adults or older kids too. There could be more (visual) variety to the game, but I didn't find a way to add this without overcomplicating the good core that we have. 
+
+For example, 
+
+* We might create _colored_ pins, which can only be hit by _balls_ of the same color. 
+* We might create different _types_ of pins. Some that can _only_ be removed at the edge, some that move in _reverse_ direction, etcetera.
+
+Sure, this would work fine, but it requires a lot of extra explanation. Extra difficulty levels, or maybe settings that completely transform the game. Before long you're forcing three different games into one game, and it just doesn't feel right.
+
+I wrote down all further improvements and ideas in a list for "Pinstrike: Deluxe" or something. Maybe they'll be made, or added to this base game, maybe not.
+
+Until next devlog,
+
+Pandaqi

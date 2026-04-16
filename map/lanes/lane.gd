@@ -40,6 +40,10 @@ func _on_data_changed() -> void:
 	line_left.points = [Vector2.ZERO, Vector2(0,size.y)]
 	line_right.points = [Vector2(size.x, 0), size]
 
+func on_appear() -> void:
+	for cell in cells:
+		cell.on_appear()
+
 func _on_input_event(_vp:Node, ev:InputEvent, _sidx:int) -> void:
 	if not (ev is InputEventMouseButton or ev is InputEventScreenTouch): return
 	if ev.is_pressed(): return

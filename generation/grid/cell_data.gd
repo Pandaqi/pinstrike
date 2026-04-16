@@ -72,6 +72,11 @@ func count() -> int:
 func is_empty() -> bool:
 	return count() <= 0
 
+static func get_all_directions() -> Array[Direction]:
+	var arr : Array[Direction]
+	arr.assign(Direction.values())
+	return arr
+
 static func convert_vector_to_direction(vec:Vector2i) -> Direction:
 	return vector_to_direction[str(vec.x) + str(vec.y)]
 

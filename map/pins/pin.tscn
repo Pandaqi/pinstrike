@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://wt15at1piax" path="res://map/pins/pin.gd" id="1_04o2q"]
 [ext_resource type="Texture2D" uid="uid://uhbkvt7xsngs" path="res://map/pins/pin.png" id="2_04o2q"]
 [ext_resource type="Texture2D" uid="uid://dbl1xuan7n3h5" path="res://puzzle-framework/gameover/circle-particle.png" id="2_5lvls"]
+[ext_resource type="Script" uid="uid://ck6nrpdiy8vqf" path="res://puzzle-framework/effects/squasher_stretcher.gd" id="4_lxilp"]
 
 [sub_resource type="Animation" id="Animation_5lvls"]
 length = 0.001
@@ -202,10 +203,13 @@ _data = {
 &"reveal": SubResource("Animation_lxilp")
 }
 
-[node name="Pin" type="Node2D" unique_id=1068527470 node_paths=PackedStringArray("sprite", "anim_player")]
+[node name="Pin" type="Node2D" unique_id=1068527470 node_paths=PackedStringArray("visuals", "sprite", "sprite_shadow", "anim_player", "squasher_stretcher")]
 script = ExtResource("1_04o2q")
+visuals = NodePath("Visuals")
 sprite = NodePath("Visuals/Sprite2D")
+sprite_shadow = NodePath("SpriteShadow")
 anim_player = NodePath("AnimationPlayer")
+squasher_stretcher = NodePath("SquasherStretcher")
 
 [node name="SpriteShadow" type="Sprite2D" parent="." unique_id=1269523677]
 modulate = Color(0, 0, 0, 0.09803922)
@@ -222,3 +226,12 @@ texture = ExtResource("2_04o2q")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=671601585]
 libraries/ = SubResource("AnimationLibrary_xy7oe")
+
+[node name="SquasherStretcher" type="Node2D" parent="." unique_id=1393323955 node_paths=PackedStringArray("node")]
+script = ExtResource("4_lxilp")
+node = NodePath("..")
+speed = Vector2(3, 3)
+max_offset = Vector2(0.015, 0.015)
+max_rot = 0.015
+randomization = 0.2
+metadata/_custom_type_script = "uid://ck6nrpdiy8vqf"

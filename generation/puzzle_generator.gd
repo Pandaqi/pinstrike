@@ -15,7 +15,9 @@ var ball_keeps_going_after_hit := false # @TODO
 
 var ball_too_weak_does_nothing := false # a ball with number < pincount simply has no effect
 var ball_matches_pincount_remove_all := false # a ball with number = pincount will remove all pins there
+
 var perfect_number_probability := 0.35
+var max_grow_options_applied := 5
 
 var directions_orthogonal : Array[CellData.Direction] = [CellData.Direction.RIGHT, CellData.Direction.BOTTOM, CellData.Direction.LEFT, CellData.Direction.TOP]
 var directions_diagonal : Array[CellData.Direction] = [CellData.Direction.TOP_RIGHT, CellData.Direction.TOP_LEFT, CellData.Direction.BOTTOM_RIGHT, CellData.Direction.BOTTOM_LEFT]
@@ -68,14 +70,22 @@ func take_turns() -> void:
 	if allow_diagonals: directions += directions_diagonal
 	
 	var num_turns := randi_range(num_turns_bounds.x, num_turns_bounds.y)
-	for i in range(num_turns):
+	var try_another_growth_index := -1
+	while solution.size() < num_turns:
 		var valid_turns := get_all_valid_turns()
 		if valid_turns.size() <= 0: break
 		
 		var rand_index := randi() % mini(valid_turns.size(), 3)
 		var rand_cell := valid_turns[rand_index]
 		
-		var last_turn := i == (num_turns - 1)
+		# if a cell could not grow, we keep trying all the other valid cells,
+		# and only break definitively if we've exhausted all options
+		if try_another_growth_index >= 0:
+			if try_another_growth_index >= valid_turns.size(): break
+			rand_cell = valid_turns[try_another_growth_index]
+		
+		# decide if this should be a perfect hit; ensure it is if it's the last turn and we still don't have one
+		var last_turn := solution.size() == (num_turns - 1)
 		var make_perfect_number := ball_matches_pincount_remove_all and (randf() <= perfect_number_probability or (last_turn and num_perfect_numbers <= 0))
 		if make_perfect_number: num_perfect_numbers += 1
 		
@@ -110,10 +120,15 @@ func take_turns() -> void:
 				growth_options.append(new_option_3)
 		
 		var can_grow := growth_options.size() > 0
-		if not can_grow: break
+		if not can_grow:
+			try_another_growth_index += 1
+			continue
+		
+		try_another_growth_index = -1
 		
 		# ... then apply a random set of them
-		var num_options_to_pick := randi_range(1, growth_options.size() - 1)
+		var max_options := mini(growth_options.size(), max_grow_options_applied)
+		var num_options_to_pick := randi_range(1, max_options)
 		growth_options.shuffle()
 		growth_options.sort_custom(func(a:GrowthOption, b:GrowthOption):
 			if (not a.is_attraction()) and b.is_attraction(): return false
@@ -160,14 +175,11 @@ func get_all_valid_turns() -> Array[CellData]:
 	
 	# first, we only want cells that should be reachable with a throw
 	# that is, they must be in FRONT OF cells that already have pins
+	# (which by default means all these cells are EMPTY right now)
 	for lane in lanes:
 		arr += lane.get_cells_before_first_non_empty()
 	
-	# then, we can only do this with a cell that's empty
-	# (there's just literally no way to end up with pins on the cell after hitting with bowling ball)
-	arr = arr.filter(func(c:CellData): return c.is_empty())
-	
-	# finally, we prefer cells with neighbors that have pins (for maximum interaction)
+	# then, we prefer cells with neighbors that have pins (for maximum interaction)
 	# first, cache this calculation to prevent doing it over and over, then sort by it
 	for elem in arr:
 		elem.calculate_neighbor_pins()
@@ -175,7 +187,8 @@ func get_all_valid_turns() -> Array[CellData]:
 	
 	arr.shuffle()
 	arr.sort_custom(func(a:CellData, b:CellData): 
-		if (not a.lane_is_empty) and b.lane_is_empty: return false # a should come AFTER b
+		# a should come AFTER b
+		if (not a.lane_is_empty) and b.lane_is_empty: return false
 		return a.neighbor_pins_pointed_at_us > b.neighbor_pins_pointed_at_us
 	)
 	
@@ -205,7 +218,8 @@ func clean_up(desperate := false) -> bool:
 	var num_total_cells := grid.cells.size()
 	var num_empty_cells := grid.get_cells().filter(func(c:CellData): return c.is_empty()).size()
 	var empty_cell_ratio := num_empty_cells / float(num_total_cells)
-	if empty_cell_ratio > max_empty_cell_ratio:
+	# if we don't have double pin growth, the map is likely to be very empty, so don't check this
+	if empty_cell_ratio > max_empty_cell_ratio and remove_pins_if_already_occupied:
 		print("PuzzleGenerator | Discarded because too many empty cells (no map diversity)")
 		return false
 	

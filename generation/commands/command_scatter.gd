@@ -29,21 +29,23 @@ func do(cmds:PuzzleCommands) -> bool:
 	# hits an existing pin
 	var has_pin := nb.has_pin_at(dir)
 	if has_pin:
-		cmds.execute_command(CommandRemove.new(nb, dir))
+		await cmds.execute_command(CommandRemove.new(nb, dir))
 		return true
 	
 	neighbor_used = nb
 	nb.add_pin(type_removed, dir)
 	return true
 
-func undo(_cmds:PuzzleCommands) -> bool:
+func undo(cmds:PuzzleCommands) -> bool:
 	# scatter ended up just being a removal, don't do anything more
 	if not type_removed: return true
-	if not neighbor_used:
-		cell.add_pin(type_removed, dir)
-		return true
-	neighbor_used.remove_pin(dir)
 	cell.add_pin(type_removed, dir)
+	
+	var vis := cmds.visualizer as PuzzleVisualizer
+	if vis: vis.play_pin_appear_tween(cell, dir)
+	
+	if not neighbor_used: return true
+	neighbor_used.remove_pin(dir)
 	return true
 
 func matches(cmd:PuzzleCommand) -> bool:

@@ -12,6 +12,9 @@ func _init(li:int, bn:int, gen:PuzzleGenerator):
 	starts_new_turn = true
 
 func do(cmds:PuzzleCommands) -> bool:
+	var vis := cmds.visualizer as PuzzleVisualizer
+	if vis: await vis.roll_bowling_ball(lane_index)
+	
 	var cur_lane := generator.lanes[lane_index]
 	var cell := cur_lane.get_first_cell_hit()
 	if not cell: return false
@@ -24,8 +27,9 @@ func do(cmds:PuzzleCommands) -> bool:
 	
 	var is_perfect_hit := (ball_number == num_pins) and generator.ball_matches_pincount_remove_all
 	
-	for dir in cell.pins_by_direction:
-		var tp := cell.pins_by_direction[dir]
+	var all_directions := CellData.get_all_directions()
+	for dir in all_directions:
+		var tp : CellData.PinType = cell.pins_by_direction.get(dir, CellData.PinType.NONE)
 		if tp == CellData.PinType.NONE: continue
 		if is_perfect_hit:
 			await cmds.execute_command(CommandRemove.new(cell, dir))

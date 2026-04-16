@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://daw0cdut7qban" path="res://map/lanes/lane.tscn" id="3_c651c"]
 [ext_resource type="PackedScene" uid="uid://4uamevepsof4" path="res://map/balls/ball.tscn" id="4_4dugh"]
 [ext_resource type="Script" uid="uid://haho73xq30yv" path="res://puzzle-framework/tools/camera.gd" id="4_c651c"]
+[ext_resource type="Script" uid="uid://bos8kl4pnyonq" path="res://map/balls/ball_selection.gd" id="4_grrlh"]
 [ext_resource type="PackedScene" uid="uid://i5j3qpcvjfkd" path="res://map/pins/pin.tscn" id="5_67ri8"]
 [ext_resource type="PackedScene" uid="uid://2xygcypttdo7" path="res://puzzle-framework/game/game_menu.tscn" id="5_kfbq2"]
 [ext_resource type="PackedScene" uid="uid://q1jom8bphw8d" path="res://puzzle-framework/gameover/game_over_dialog.tscn" id="6_4dugh"]
@@ -26,20 +27,32 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.98039216, 0.98039216, 0.98039216, 1)
 
-[node name="PuzzleVisualizer" type="Node2D" parent="." unique_id=708301961 node_paths=PackedStringArray("bowling_ball", "fake_pin")]
+[node name="PuzzleVisualizer" type="Node2D" parent="." unique_id=708301961 node_paths=PackedStringArray("bowling_ball", "fake_pin", "ball_selection")]
 script = ExtResource("2_3wy1v")
 bowling_ball = NodePath("BowlingBall")
 fake_pin = NodePath("FakePin")
+ball_selection = NodePath("../UI/BallSelection")
 lane_scene = ExtResource("3_c651c")
 
 [node name="BowlingBall" parent="PuzzleVisualizer" unique_id=1277382041 instance=ExtResource("4_4dugh")]
+z_index = 512
+ui = false
 
 [node name="FakePin" parent="PuzzleVisualizer" unique_id=1068527470 instance=ExtResource("5_67ri8")]
+z_index = 1024
+floating = true
 
 [node name="PuzzleCamera" type="Camera2D" parent="." unique_id=865078962]
 script = ExtResource("4_c651c")
 edge_margin = Vector2(32, 92)
 metadata/_custom_type_script = "uid://haho73xq30yv"
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1785190130]
+layer = 16
+
+[node name="BallSelection" type="Node2D" parent="UI" unique_id=1676965724]
+script = ExtResource("4_grrlh")
+ball_scene = ExtResource("4_4dugh")
 
 [node name="GameMenu" parent="." unique_id=950523672 instance=ExtResource("5_kfbq2")]
 allow_undo = true
