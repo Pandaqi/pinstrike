@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PuzzleSettingCheckbox" format=3 uid="uid://bmk3s54qkkyk2"]
+
+[ext_resource type="Script" uid="uid://dhfd6mahjlglv" path="res://puzzle-framework/settings/setting_checkbox.gd" id="1_f3xoc"]
+
+[resource]
+script = ExtResource("1_f3xoc")
+key = "narrate_numbers"
+label = "Narrate Numbers"
+default = true
+tooltip = "The game says the word for the number on the bowling ball you'll throw this turn."
+metadata/_custom_type_script = "uid://dhfd6mahjlglv"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PuzzleSettingSlider" format=3 uid="uid://d1kd82f40s8yl"]
+
+[ext_resource type="Script" uid="uid://bveqd8k261myk" path="res://puzzle-framework/settings/setting_slider.gd" id="1_fx84k"]
+
+[resource]
+script = ExtResource("1_fx84k")
+min_value = 0.2
+max_value = 6.0
+step_size = 0.2
+feedback_unit = "x"
+feedback_rounded = false
+key = "pin_animation_speed"
+label = "Pin Animation Speed"
+default = 1.0
+tooltip = "How quickly pins scatter, move, and disappear."
+metadata/_custom_type_script = "uid://bveqd8k261myk"

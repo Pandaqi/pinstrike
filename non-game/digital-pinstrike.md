@@ -85,36 +85,31 @@ ball_keeps_going_after_hit = true?? (Or maybe it only keeps going if the ball wa
 
 Move my improvement with `visualizer` attached to PuzzleCommands by default back to general system.
 
+Also made improvements to `PuzzleTween` and other stuff. **This is simply the latest version now!** => @TODO: Allow setting the _scale_ of the `give_feedback` node?
 
-### Generation
 
-THINK ABOUT IF I REALLY DON'T WANT TO MAKE "MORE" OUT OF THIS. Whether numbers are introduced too late, perhaps. (+SHOULD we include 0??)
+### Crucial
+
+Create **tutorial**.
+
+* Spoken instructions
+* Pointer over first lane to click
+* Explanation image??
+
+Create **marketing video**.
+
+
+
+
+### Future To-Do / Deluxe Version
+
+THINK ABOUT IF I REALLY DON'T WANT TO MAKE "MORE" OUT OF THIS. Whether numbers are introduced too late, perhaps.
 
 **@IDEA:** Show numbers _on squares_. If you get _that many pins_ there, they are removed!
 
 * GENERATION = GrowthOption = Pick a number, place that many pins on the cell.
 * The only requirement now is that this cell is CHANGED at some point (something must _cause_ it to become that number and then remove everything)
 
-
-### Visuals / Feedback
-
-PINS:
-
-* Make outline of pins dynamic so I can make it always the same size (regardless of camera zoom in/out)?
-* Setting to allow random visual differentiation? (Just re-tinting pins randomly.)
-* Setting for "simultaneous scatter"? Or "instant scatter"?
-
-MENU/BACKGROUND: What to do for this?
-
-OTHER:
-
-* Create a variation for when `remove_pins_if_already_occupied` is false? In that case, it just does not move it/does not ALLOW it, or only removes the initial one?
-* Particles, SoundFX, feedback (especially on PERFECT HITS or BALL TOO WEAK)
-* During scatter of pin, play audio with name of direction (IF enabled in settings)
-* HOVER effect over lane you've currently selected for rolling
-
-
-### Future To-Do / Deluxe Version
 
 @NOTE: Now I do something funky with adding appear/disappear tweens on pins manually in the right places. I _should_ have just made a `CommandPinAdd` and `CommandPinRemove` and let _those_ handle both the logic and tweens ... 
 

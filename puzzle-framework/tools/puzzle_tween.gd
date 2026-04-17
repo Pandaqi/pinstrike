@@ -1,5 +1,7 @@
 class_name PuzzleTween
 
+static var feedback_scene := preload("res://puzzle-framework/effects/feedback/feedback.tscn")
+
 static func play_popup_tween(obj:Node2D, dur_bounds := Vector2(0.2, 0.6)) -> Tween:
 	var tw := obj.get_tree().create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BOUNCE)
 	var dur := randf_range(dur_bounds.x, dur_bounds.y)
@@ -92,13 +94,14 @@ static func play_pointer_tween(obj:Node2D, pos:Vector2) -> Tween:
 	return tw
 
 
-# @TODO
-# PuzzleFeedback.TYPE would be some default GOOD/NEUTRAL/BAD
-# feedback_scene would be something that automatically animates itself popping in, fading away, deleting itself
-#static func give_feedback(cont:Node2D, txt:String, type:PuzzleFeedback.Type) -> Node2D:
-	#var fb := feedback_scene.instantiate()
-	#fb.set_data(txt, type)
-	#cont.add_child(fb)
+static func give_feedback(container:Node2D, pos := Vector2.ZERO, txt:String = "", tex:Texture2D = null, scl := Vector2.ONE) -> PuzzleFeedback:
+	var fb : PuzzleFeedback = feedback_scene.instantiate()
+	container.add_child(fb)
+	fb.set_position(pos)
+	fb.set_size(scl)
+	if tex: fb.set_sprite(tex)
+	if txt: fb.set_text(txt)
+	return fb
 
 static func force_tween_completion(tw:Tween, dur := 10.0) -> void:
 	if not tw.is_running(): return

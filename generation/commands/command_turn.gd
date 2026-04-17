@@ -23,15 +23,19 @@ func do(cmds:PuzzleCommands) -> bool:
 	
 	var invalid_move := (ball_number < num_pins) and generator.ball_too_weak_does_nothing
 	if invalid_move:
+		vis.bowling_ball.play_invalid_hit_sound()
 		return false
 	
 	var is_perfect_hit := (ball_number == num_pins) and generator.ball_matches_pincount_remove_all
+	if is_perfect_hit:
+		PuzzleTween.give_feedback(vis, vis.bowling_ball.global_position, "Strike!")
 	
 	var all_directions := CellData.get_all_directions()
 	for dir in all_directions:
 		var tp : CellData.PinType = cell.pins_by_direction.get(dir, CellData.PinType.NONE)
 		if tp == CellData.PinType.NONE: continue
 		if is_perfect_hit:
+			vis.bowling_ball.play_perfect_hit_sound()
 			await cmds.execute_command(CommandRemove.new(cell, dir))
 			continue
 		await cmds.execute_command(CommandScatter.new(cell, dir, generator))

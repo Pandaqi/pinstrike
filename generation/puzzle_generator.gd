@@ -157,7 +157,7 @@ func get_random_ball_number(num_pins:int) -> int:
 	if ball_too_weak_does_nothing:
 		return num_pins + randi_range(1,3)
 	
-	var arr : Array[int] = [0,1,2,3,4,5,6,7,8]
+	var arr : Array[int] = [1,2,3,4,5,6,7,8]
 	arr.erase(num_pins)
 	return arr.pick_random()
 

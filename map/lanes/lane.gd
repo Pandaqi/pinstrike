@@ -3,19 +3,26 @@ class_name Lane
 
 var data : LaneData
 
+var hovering := false
+@export var hover_line_color := Color.RED
+
 @export var cell_scene : PackedScene
 var cells : Array[Cell] = []
 
 @export var area : Area2D
 @export var col_shape : CollisionShape2D
 
+@export var lines : Node2D
 @export var line_left : Line2D
 @export var line_right : Line2D
 
 signal clicked()
+signal hover_changed(h:bool)
 
 func _ready() -> void:
 	area.input_event.connect(_on_input_event)
+	area.mouse_entered.connect(_on_mouse_entered)
+	area.mouse_exited.connect(_on_mouse_exited)
 
 func sync_to_data(ld:LaneData) -> void:
 	data = ld
@@ -48,6 +55,20 @@ func _on_input_event(_vp:Node, ev:InputEvent, _sidx:int) -> void:
 	if not (ev is InputEventMouseButton or ev is InputEventScreenTouch): return
 	if ev.is_pressed(): return
 	clicked.emit()
+
+func _on_mouse_entered() -> void:
+	hovering = true
+	lines.z_index = 1024
+	line_left.default_color = hover_line_color
+	line_right.default_color = hover_line_color
+	hover_changed.emit(true)
+
+func _on_mouse_exited() -> void:
+	hovering = false
+	lines.z_index = 0
+	line_left.default_color = Color.BLACK
+	line_right.default_color = Color.BLACK
+	hover_changed.emit(false)
 
 func get_size() -> Vector2:
 	return Vector2(PuzzleVisualizer.cell_size) * Vector2(1, count())

@@ -45,6 +45,28 @@ static var direction_to_vector : Dictionary[Direction,Vector2i] = {
 	Direction.TOP_RIGHT: Vector2i(1,-1)
 }
 
+static var direction_to_audio : Dictionary[Direction, String] = {
+	Direction.RIGHT: "direction-right",
+	Direction.BOTTOM_RIGHT: "direction-bottom-right", # "direction-diagonal" for all diagonals means you hear that sound bite a LOT (because there are 4 diagonal directions), it annoys me, so let's just name each diagonal direction uniquely
+	Direction.BOTTOM: "direction-down",
+	Direction.BOTTOM_LEFT: "direction-bottom-left",
+	Direction.LEFT: "direction-left",
+	Direction.TOP_LEFT: "direction-top-left",
+	Direction.TOP: "direction-up",
+	Direction.TOP_RIGHT: "direction-top-right"
+}
+
+static var direction_to_color : Dictionary[Direction, Color] = {
+	Direction.RIGHT: Color.RED,
+	Direction.BOTTOM_RIGHT: Color.YELLOW, # "direction-diagonal" for all diagonals means you hear that sound bite a LOT (because there are 4 diagonal directions), it annoys me, so let's just name each diagonal direction uniquely
+	Direction.BOTTOM: Color.ORANGE,
+	Direction.BOTTOM_LEFT: Color.GREEN,
+	Direction.LEFT: Color.CYAN,
+	Direction.TOP_LEFT: Color.BLUE,
+	Direction.TOP: Color.PURPLE,
+	Direction.TOP_RIGHT: Color.PINK
+}
+
 var neighbor_pins_pointed_at_us := 0
 var lane_is_empty := false
 
@@ -71,6 +93,12 @@ func count() -> int:
 
 func is_empty() -> bool:
 	return count() <= 0
+
+static func get_audio_for_direction(dir:Direction) -> AudioStream:
+	return load("res://map/sounds/directions/" + direction_to_audio[dir] + ".ogg")
+
+static func get_color_for_direction(dir:Direction) -> Color:
+	return direction_to_color[dir]
 
 static func get_all_directions() -> Array[Direction]:
 	var arr : Array[Direction]

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PuzzleSettingCheckbox" format=3 uid="uid://dwi3rqdt027lp"]
+
+[ext_resource type="Script" uid="uid://dhfd6mahjlglv" path="res://puzzle-framework/settings/setting_checkbox.gd" id="1_3otdh"]
+
+[resource]
+script = ExtResource("1_3otdh")
+key = "color_by_direction"
+label = "Use Colored Pins"
+default = false
+tooltip = "Pins get a unique color based on their direction."
+metadata/_custom_type_script = "uid://dhfd6mahjlglv"

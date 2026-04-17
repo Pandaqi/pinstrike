@@ -15,6 +15,11 @@ func _init(c:CellData, d:CellData.Direction, gen:PuzzleGenerator):
 
 func do(cmds:PuzzleCommands) -> bool:
 	var vis := cmds.visualizer as PuzzleVisualizer
+	var nb := cell.get_opposite_neighbor(dir)
+	var is_invalid_move : bool = (nb and nb.has_pin_at(dir)) and (not PuzzleSettings.get_difficulty_property("remove_points_if_already_occupied"))
+	if is_invalid_move:
+		vis.bowling_ball.play_invalid_hit_sound("occupied")
+		return false
 	
 	type_removed = cell.get_pin_at(dir)
 	cell.remove_pin(dir)
@@ -23,7 +28,6 @@ func do(cmds:PuzzleCommands) -> bool:
 		await vis.create_scatter_tween(cell, dir)
 	
 	# at the edge; we've already been removed; nothing more to do
-	var nb := cell.get_opposite_neighbor(dir)
 	if not nb: return true
 	
 	# hits an existing pin

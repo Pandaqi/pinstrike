@@ -2,39 +2,49 @@
 
 [ext_resource type="Script" uid="uid://wawg7byh3y7j" path="res://main/main.gd" id="1_53q0u"]
 [ext_resource type="Script" uid="uid://27j1tl3eylia" path="res://map/puzzle_visualizer.gd" id="2_3wy1v"]
+[ext_resource type="PackedScene" uid="uid://dm4fuhm6hw1lq" path="res://map/background/background.tscn" id="2_na0o7"]
 [ext_resource type="PackedScene" uid="uid://daw0cdut7qban" path="res://map/lanes/lane.tscn" id="3_c651c"]
 [ext_resource type="PackedScene" uid="uid://4uamevepsof4" path="res://map/balls/ball.tscn" id="4_4dugh"]
 [ext_resource type="Script" uid="uid://haho73xq30yv" path="res://puzzle-framework/tools/camera.gd" id="4_c651c"]
+[ext_resource type="AudioStream" uid="uid://dhgu88dtj2sy6" path="res://map/sounds/bowling/strike-1.ogg" id="4_fwcvl"]
 [ext_resource type="Script" uid="uid://bos8kl4pnyonq" path="res://map/balls/ball_selection.gd" id="4_grrlh"]
 [ext_resource type="PackedScene" uid="uid://i5j3qpcvjfkd" path="res://map/pins/pin.tscn" id="5_67ri8"]
 [ext_resource type="PackedScene" uid="uid://2xygcypttdo7" path="res://puzzle-framework/game/game_menu.tscn" id="5_kfbq2"]
+[ext_resource type="AudioStream" uid="uid://dit3coqfc25w0" path="res://map/sounds/bowling/strike-2.ogg" id="5_na0o7"]
 [ext_resource type="PackedScene" uid="uid://q1jom8bphw8d" path="res://puzzle-framework/gameover/game_over_dialog.tscn" id="6_4dugh"]
+[ext_resource type="AudioStream" uid="uid://dtgkuva3ffdj4" path="res://map/sounds/bowling/strike-3.ogg" id="6_73k8k"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_ku88a"]
+streams_count = 3
+stream_0/stream = ExtResource("4_fwcvl")
+stream_1/stream = ExtResource("5_na0o7")
+stream_2/stream = ExtResource("6_73k8k")
 
 [node name="Main" type="Node2D" unique_id=251134698 node_paths=PackedStringArray("vis", "cam")]
 script = ExtResource("1_53q0u")
 vis = NodePath("PuzzleVisualizer")
 cam = NodePath("PuzzleCamera")
 
-[node name="Background" type="CanvasLayer" parent="." unique_id=1782886308]
-layer = -1
+[node name="Background" parent="." unique_id=2019709945 instance=ExtResource("2_na0o7")]
+animate_ball = false
 
-[node name="ColorRect" type="ColorRect" parent="Background" unique_id=310822122]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.98039216, 0.98039216, 0.98039216, 1)
-
-[node name="PuzzleVisualizer" type="Node2D" parent="." unique_id=708301961 node_paths=PackedStringArray("bowling_ball", "fake_pin", "ball_selection")]
+[node name="PuzzleVisualizer" type="Node2D" parent="." unique_id=708301961 node_paths=PackedStringArray("bowling_ball", "bowling_ball_hover", "fake_pin", "ball_selection", "audio_strike")]
 script = ExtResource("2_3wy1v")
 bowling_ball = NodePath("BowlingBall")
+bowling_ball_hover = NodePath("BowlingBallHover")
 fake_pin = NodePath("FakePin")
 ball_selection = NodePath("../UI/BallSelection")
+audio_strike = NodePath("AudioStrike")
 lane_scene = ExtResource("3_c651c")
 
-[node name="BowlingBall" parent="PuzzleVisualizer" unique_id=1277382041 instance=ExtResource("4_4dugh")]
+[node name="AudioStrike" type="AudioStreamPlayer2D" parent="PuzzleVisualizer" unique_id=1388379083]
+stream = SubResource("AudioStreamRandomizer_ku88a")
+
+[node name="BowlingBall" parent="PuzzleVisualizer" unique_id=1576656194 instance=ExtResource("4_4dugh")]
+z_index = 512
+ui = false
+
+[node name="BowlingBallHover" parent="PuzzleVisualizer" unique_id=1123827535 instance=ExtResource("4_4dugh")]
 z_index = 512
 ui = false
 

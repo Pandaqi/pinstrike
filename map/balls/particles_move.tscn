@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://6ndjfu3tbiqy"]
+
+[ext_resource type="Texture2D" uid="uid://dbl1xuan7n3h5" path="res://puzzle-framework/gameover/circle-particle.png" id="1_78coy"]
+
+[sub_resource type="Curve" id="Curve_dyyar"]
+_data = [Vector2(0, 0), 0.0, 1.9784741, 0, 0, Vector2(0.19928186, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.3120422, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_fnvbb"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="ParticlesMove" type="CPUParticles2D" unique_id=1987343641]
+amount = 64
+texture = ExtResource("1_78coy")
+lifetime = 0.75
+randomness = 0.5
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_rect_extents = Vector2(32, 0)
+scale_amount_min = 0.15
+scale_amount_max = 0.3
+scale_amount_curve = SubResource("Curve_dyyar")
+color = Color(0.20392157, 0.003921569, 0.16078432, 1)
+color_ramp = SubResource("Gradient_fnvbb")

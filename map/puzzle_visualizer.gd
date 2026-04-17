@@ -7,11 +7,14 @@ var bounds : Rect2
 
 var turn := -1
 var busy := false
+var lane_hovered : Lane
 
 @export var bowling_ball : Ball
+@export var bowling_ball_hover : Ball
 @export var fake_pin : Pin
 
 @export var ball_selection : BallSelection
+@export var audio_strike : AudioStreamPlayer2D
 
 @export var lane_scene : PackedScene
 var lanes : Array[Lane]
@@ -41,6 +44,7 @@ func visualize(gen:PuzzleGenerator) -> void:
 		counter += 1
 		
 		lane.clicked.connect(_on_lane_clicked, CONNECT_APPEND_SOURCE_OBJECT)
+		lane.hover_changed.connect(_on_lane_hovered, CONNECT_APPEND_SOURCE_OBJECT)
 		
 		lanes.append(lane)
 		add_child(lane)
@@ -86,6 +90,17 @@ func count_pins() -> int:
 		sum += lane.count_pins()
 	return sum
 
+func _physics_process(_dt:float) -> void:
+	visualize_hovered_lane()
+
+func visualize_hovered_lane() -> void:
+	if not lane_hovered: 
+		bowling_ball_hover.hide()
+		return
+	bowling_ball_hover.show()
+	bowling_ball_hover.set_position(lane_hovered.get_start_position())
+	bowling_ball_hover.modulate.a = 0.15 if bowling_ball.rolling else 1.0
+
 func play_pin_disappear_tween(cell_data:CellData, dir:CellData.Direction) -> void:
 	var cell := get_cell_from_data(cell_data)
 	var pin := cell.get_pin_at(dir)
@@ -100,6 +115,12 @@ func play_pin_appear_tween(cell_data:CellData, dir:CellData.Direction) -> void:
 
 func get_current_ball_number() -> int:
 	return generator.solution[turn].ball_number
+
+func _on_lane_hovered(hovering:bool, lane:Lane) -> void:
+	if lane_hovered == lane and not hovering:
+		lane_hovered = null
+	if hovering:
+		lane_hovered = lane
 
 func _on_lane_clicked(lane:Lane) -> void:
 	if commands.is_busy() or busy: return
@@ -126,8 +147,10 @@ func goto_game_over(we_won:bool) -> void:
 
 func roll_bowling_ball(lane_index:int) -> void:
 	# bowling_ball.set_number(get_current_ball_number())
-	bowling_ball.roll(lanes[lane_index])
+	bowling_ball.roll_over_lane(lanes[lane_index])
 	await bowling_ball.roll_finished
+	if bowling_ball.roll_hits_something: 
+		PuzzleAudio.play_audio_nice(audio_strike)
 
 func get_cell_from_data(cell_data:CellData) -> Cell:
 	return lanes[cell_data.pos.x].cells[cell_data.pos.y]
@@ -142,10 +165,15 @@ func create_scatter_tween(cell_data:CellData, dir:CellData.Direction) -> void:
 	fake_pin.set_position(start_pos)
 	fake_pin.sprite.set_rotation(0) # @NOTE: we rotate the sprite because the pin is anchored at the bottom-Y, so rotating the whole thing would be really wonky
 	
+	fake_pin.match_look_of(cell.get_pin_at(dir))
+	fake_pin.play_knock_sound(dir)
+	
 	var end_rotation := (2 * PI)
 	if vec.x < 0: end_rotation *= -1
 	
-	var duration := randf_range(0.2, 0.3)
+	var duration := randf_range(0.45, 0.5)
+	duration /= PuzzleSettings.get_value("pin_animation_speed")
+	
 	var tw := get_tree().create_tween()
 	tw.tween_property(fake_pin, "position", end_pos, duration)
 	tw.parallel().tween_property(fake_pin.sprite, "rotation", end_rotation, duration)

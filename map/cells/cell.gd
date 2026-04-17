@@ -45,6 +45,8 @@ func _on_data_changed() -> void:
 		#if is_change: pin.play_appear_animation()
 		pin.show()
 		pin.z_index = 3 + CellData.convert_direction_to_vector(dir).y
+		pin.set_type(type_new)
+		pin.set_direction(dir)
 		pin.set_position(to_local(get_position_of_pin_at(dir)))
 	
 	pins_old = data.pins_by_direction.duplicate(false)
@@ -54,8 +56,6 @@ func get_pin_at(dir:CellData.Direction) -> Pin:
 
 func get_position_of_pin_at(dir:CellData.Direction) -> Vector2:
 	return global_position + CellData.convert_direction_to_vector(dir) * pin_offset
-
-
 
 
 

@@ -11,9 +11,9 @@ config_version=5
 [application]
 
 config/name="pinstrike"
-run/main_scene="uid://bo21p72yjp0wm"
+run/main_scene="uid://ioo441cokhft"
 config/features=PackedStringArray("4.6", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="uid://bhs661nphnqv7"
 
 [autoload]
 

@@ -1,7 +1,11 @@
 [gd_scene format=3 uid="uid://4uamevepsof4"]
 
 [ext_resource type="Script" uid="uid://cs1gujw1gg1ah" path="res://map/balls/ball.gd" id="1_6ia07"]
+[ext_resource type="PackedScene" uid="uid://6ndjfu3tbiqy" path="res://map/balls/particles_move.tscn" id="2_fnvbb"]
 [ext_resource type="Texture2D" uid="uid://cjf35dcn7kp4" path="res://map/balls/ball-spritesheet.png" id="2_srcqj"]
+[ext_resource type="AudioStream" uid="uid://n8v80hoah24c" path="res://map/sounds/bowling/bowling-ball-roll.ogg" id="3_uv2x1"]
+[ext_resource type="AudioStream" uid="uid://c22atrntt5mds" path="res://puzzle-framework/game/sfx/positive_1.ogg" id="7_dyyar"]
+[ext_resource type="AudioStream" uid="uid://d3v8u25xskc3a" path="res://puzzle-framework/game/sfx/error.ogg" id="8_agf3t"]
 
 [sub_resource type="Animation" id="Animation_67ri8"]
 length = 0.001
@@ -42,12 +46,21 @@ _data = {
 &"roll": SubResource("Animation_grrlh")
 }
 
-[node name="BowlingBall" type="Node2D" unique_id=1277382041 node_paths=PackedStringArray("visuals", "sprite", "anim_player", "label")]
+[node name="BowlingBall" type="Node2D" unique_id=1277382041 node_paths=PackedStringArray("visuals", "sprite", "anim_player", "label", "audio_roll", "audio_perfect_hit", "audio_invalid_hit", "audio_narrate", "particles_move")]
 script = ExtResource("1_6ia07")
 visuals = NodePath("Visuals")
 sprite = NodePath("Visuals/Sprite2D")
 anim_player = NodePath("AnimationPlayer")
 label = NodePath("Visuals/Label")
+audio_roll = NodePath("AudioRoll")
+audio_perfect_hit = NodePath("AudioPerfectHit")
+audio_invalid_hit = NodePath("AudioInvalidHit")
+audio_narrate = NodePath("AudioNarrate")
+particles_move = NodePath("ParticlesMove")
+
+[node name="ParticlesMove" parent="." unique_id=1987343641 instance=ExtResource("2_fnvbb")]
+emission_rect_extents = Vector2(32, 32)
+gravity = Vector2(0, 60)
 
 [node name="Visuals" type="Node2D" parent="." unique_id=772789363]
 
@@ -74,3 +87,14 @@ vertical_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=520952868]
 libraries/ = SubResource("AnimationLibrary_0i4oc")
+
+[node name="AudioRoll" type="AudioStreamPlayer2D" parent="." unique_id=1865437098]
+stream = ExtResource("3_uv2x1")
+
+[node name="AudioPerfectHit" type="AudioStreamPlayer2D" parent="." unique_id=1296203285]
+stream = ExtResource("7_dyyar")
+
+[node name="AudioInvalidHit" type="AudioStreamPlayer2D" parent="." unique_id=991001231]
+stream = ExtResource("8_agf3t")
+
+[node name="AudioNarrate" type="AudioStreamPlayer" parent="." unique_id=296492276]

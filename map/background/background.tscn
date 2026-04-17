@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://dm4fuhm6hw1lq"]
+
+[ext_resource type="Script" uid="uid://bubydvqctvhnr" path="res://map/background/background.gd" id="1_uh3jq"]
+[ext_resource type="PackedScene" uid="uid://4uamevepsof4" path="res://map/balls/ball.tscn" id="2_itrph"]
+[ext_resource type="PackedScene" uid="uid://i5j3qpcvjfkd" path="res://map/pins/pin.tscn" id="3_itrph"]
+
+[node name="Background" type="CanvasLayer" unique_id=2019709945 node_paths=PackedStringArray("bowling_ball", "fake_pin")]
+layer = -1
+script = ExtResource("1_uh3jq")
+bowling_ball = NodePath("BowlingBall")
+fake_pin = NodePath("Pin")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2092178219]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.98039216, 0.98039216, 0.98039216, 1)
+
+[node name="BowlingBall" parent="." unique_id=1277382041 instance=ExtResource("2_itrph")]
+ui = false
+
+[node name="Pin" parent="." unique_id=1068527470 instance=ExtResource("3_itrph")]

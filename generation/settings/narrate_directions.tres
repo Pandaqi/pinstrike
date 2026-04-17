@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PuzzleSettingCheckbox" format=3 uid="uid://cb74ucnjabf11"]
+
+[ext_resource type="Script" uid="uid://dhfd6mahjlglv" path="res://puzzle-framework/settings/setting_checkbox.gd" id="1_ev6tr"]
+
+[resource]
+script = ExtResource("1_ev6tr")
+key = "narrate_directions"
+label = "Narrate Directions"
+default = true
+tooltip = "The game says the word for the direction in which a pin scatters."
+metadata/_custom_type_script = "uid://dhfd6mahjlglv"
