@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PuzzleTutorialStage" format=3 uid="uid://big2ogt5c86gg"]
+
+[ext_resource type="AudioStream" uid="uid://cc5120tw657ou" path="res://map/tutorial/tut-easiest.ogg" id="1_gmxp0"]
+[ext_resource type="Script" uid="uid://dbnf0revlghrs" path="res://puzzle-framework/tutorial/puzzle_tutorial_stage.gd" id="2_sxolt"]
+[ext_resource type="Texture2D" uid="uid://bfqp6mdtclxfn" path="res://map/tutorial/tut-easiest.png" id="2_vht1k"]
+
+[resource]
+script = ExtResource("2_sxolt")
+audio = ExtResource("1_gmxp0")
+image_background = ExtResource("2_vht1k")
+object_focus_index = 0
+object_focus_is_pointer = true
+metadata/_custom_type_script = "uid://dbnf0revlghrs"

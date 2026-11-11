@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PuzzleSettingCheckbox" format=3 uid="uid://c4yxd0ofkxxtb"]
+
+[ext_resource type="Script" uid="uid://dhfd6mahjlglv" path="res://puzzle-framework/settings/setting_checkbox.gd" id="1_dtuga"]
+
+[resource]
+script = ExtResource("1_dtuga")
+key = "enable_number_keys"
+label = "Enable Number Keys"
+default = true
+tooltip = "Pressing \"2\" on the keyboard, for example, rolls the ball over lane 2."
+metadata/_custom_type_script = "uid://dhfd6mahjlglv"

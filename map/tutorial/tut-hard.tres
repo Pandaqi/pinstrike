@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PuzzleTutorialStage" format=3 uid="uid://dfsyf30crixad"]
+
+[ext_resource type="AudioStream" uid="uid://dqwfsvkb6km34" path="res://map/tutorial/tut-hard.ogg" id="1_vosy2"]
+[ext_resource type="Texture2D" uid="uid://c2uhpsln7ehv7" path="res://map/tutorial/tut-hard.png" id="2_3vrnm"]
+[ext_resource type="Script" uid="uid://dbnf0revlghrs" path="res://puzzle-framework/tutorial/puzzle_tutorial_stage.gd" id="2_6hobs"]
+
+[resource]
+script = ExtResource("2_6hobs")
+audio = ExtResource("1_vosy2")
+image_background = ExtResource("2_3vrnm")
+metadata/_custom_type_script = "uid://dbnf0revlghrs"

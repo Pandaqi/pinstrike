@@ -21,6 +21,9 @@ Promising!
 
 ## Easiest
 
+TUTORIAL: "Tap a lane to throw a bowling ball. Clear the puzzle by moving all pins off the map."
+
+
 num_lanes_bounds = (3,3)
 lane_length_bounds = (2,4)
 num_turns_bounds = (2,4)
@@ -31,12 +34,10 @@ remove_pins_if_already_occupied = false
 ball_too_weak_does_nothing = false
 ball_matches_pincount_remove_all = false
 
-@TODO: Maybe even limit number of pins on cells to 1 at most? So I can play a sound bite ("LEFT") depending on how each one scatters?
----> Nah, I probably want a system to support multi scattering anyway, so it would put them all in a list and play one by one.
----> Maybe the scattering animation can also be _one pin at a time_ for extra clarity?
-
 
 ## Easy
+
+TUTORIAL: "If a pin hits another pin, both are removed."
 
 num_lanes_bounds = (3,4)
 lane_length_bounds = (3,5)
@@ -60,6 +61,8 @@ ball_matches_pincount_remove_all = false
 
 ## Hard
 
+TUTORIAL: "Bowling balls have a number. If the number of pins in a space matches the bowling ball, you have a perfect strike and all pins are removed!"
+
 allow_diagonals = true
 remove_pins_if_already_occupied = true
 
@@ -69,58 +72,8 @@ ball_matches_pincount_remove_all = true
 
 ## Hardest
 
+TUTORIAL: "If the number of pins in a space is higher than the bowling ball number, it's too weak and does nothing."
 
 ball_too_weak_does_nothing = true
 ball_matches_pincount_remove_all = true
 
-ball_keeps_going_after_hit = true?? (Or maybe it only keeps going if the ball was too weak for the first option?)
-
-
-
-
-
-## To-Do
-
-### PuzzleFramework
-
-Move my improvement with `visualizer` attached to PuzzleCommands by default back to general system.
-
-Also made improvements to `PuzzleTween` and other stuff. **This is simply the latest version now!** => @TODO: Allow setting the _scale_ of the `give_feedback` node?
-
-
-### Crucial
-
-Create **tutorial**.
-
-* Spoken instructions
-* Pointer over first lane to click
-* Explanation image??
-
-Create **marketing video**.
-
-
-
-
-### Future To-Do / Deluxe Version
-
-THINK ABOUT IF I REALLY DON'T WANT TO MAKE "MORE" OUT OF THIS. Whether numbers are introduced too late, perhaps.
-
-**@IDEA:** Show numbers _on squares_. If you get _that many pins_ there, they are removed!
-
-* GENERATION = GrowthOption = Pick a number, place that many pins on the cell.
-* The only requirement now is that this cell is CHANGED at some point (something must _cause_ it to become that number and then remove everything)
-
-
-@NOTE: Now I do something funky with adding appear/disappear tweens on pins manually in the right places. I _should_ have just made a `CommandPinAdd` and `CommandPinRemove` and let _those_ handle both the logic and tweens ... 
-
-@NOTE: Now it will never attract from BELOW, because it thinks cells behind it could never be reached. We can write a small little exception for this very specific case? Seems really hard actually ... **forget about this for now**
-
-
-
-
-* Do "cascading scattering" ---> hitting an existing pin just makes _that_ pin scatter away too, and this sequence of events continues until nothing is hit anymore. (Often with the final scatter sending it off the edge.)
-  * HOW would you generate this, though?
-  * GROWTH OPTION: Create an entire _line_ of pins, all in the same direction, until the edge. (Instead of just double pins.) => NO THIS ISN'T ENOUGH. Because the original pin that started the cascade will still remain on that first square.
-* Allow ball to keep rolling after hit? Or maybe it only keeps going if the ball was too weak for the first option?
-* We might create _colored_ pins, which can only be hit by _balls_ of the same color. 
-* We might create different _types_ of pins. Some that can _only_ be removed at the edge, some that move in _reverse_ direction, etcetera.

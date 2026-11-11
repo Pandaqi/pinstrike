@@ -127,6 +127,7 @@ func get_position_in_viewport(pos:Vector2) -> Vector2:
 func add_to_background(t:Texture2D) -> Sprite2D:
 	var s := Sprite2D.new()
 	s.texture = t
+	s.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	background.add_child(s)
 	s.set_position(get_position_in_viewport(background_anchor))
 	s.set_scale(Vector2.ONE * background_scale)
@@ -136,6 +137,7 @@ func add_to_background(t:Texture2D) -> Sprite2D:
 func add_to_foreground(t:Texture2D) -> Sprite2D:
 	var s := Sprite2D.new()
 	s.texture = t
+	s.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	foreground.add_child(s)
 	s.set_position(get_position_in_viewport(foreground_anchor))
 	s.set_scale(Vector2.ONE * foreground_scale)

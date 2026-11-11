@@ -16,6 +16,8 @@ var lane_hovered : Lane
 @export var ball_selection : BallSelection
 @export var audio_strike : AudioStreamPlayer2D
 
+@export var tutorial : PuzzleTutorial
+
 @export var lane_scene : PackedScene
 var lanes : Array[Lane]
 
@@ -58,6 +60,11 @@ func visualize(gen:PuzzleGenerator) -> void:
 	
 	ball_selection.set_solution(generator.solution)
 	
+	var focus_objects : Array[Node2D] = []
+	for cmd in generator.solution:
+		focus_objects.append(lanes[cmd.lane_index].center_marker)
+	tutorial.set_focus_objects(focus_objects)
+	
 	commands.do_finished.connect(_on_commands_do_finished)
 	commands.undo_finished.connect(_on_commands_undo_finished)
 	set_turn(0)
@@ -82,6 +89,7 @@ func set_turn(t:int) -> void:
 		return
 	
 	turn = clampi(t, 0, max_turns)
+	bowling_ball_hover.set_number(get_current_ball_number())
 	turn_changed.emit(turn)
 
 func count_pins() -> int:
@@ -122,6 +130,20 @@ func _on_lane_hovered(hovering:bool, lane:Lane) -> void:
 	if hovering:
 		lane_hovered = lane
 
+func _input(ev:InputEvent) -> void:
+	check_number_hotkey(ev)
+
+func check_number_hotkey(ev:InputEvent) -> void:
+	if not PuzzleSettings.get_value("enable_number_keys"): return
+	if not (ev is InputEventKey): return
+	if ev.is_pressed(): return
+	
+	var number_keys := [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9]
+	for i in range(lanes.size()):
+		if (ev as InputEventKey).keycode != number_keys[i]: continue
+		_on_lane_clicked(lanes[i])
+		break
+
 func _on_lane_clicked(lane:Lane) -> void:
 	if commands.is_busy() or busy: return
 	
@@ -139,14 +161,11 @@ func _on_commands_do_finished(cmd:PuzzleCommand) -> void:
 
 func _on_commands_undo_finished(_cmds:Array[PuzzleCommand]) -> void:
 	refresh_turn()
-	
-	#@TODO: roll the bowling ball in reverse?
 
 func goto_game_over(we_won:bool) -> void:
 	PuzzleFramework.finish_puzzle(we_won)
 
 func roll_bowling_ball(lane_index:int) -> void:
-	# bowling_ball.set_number(get_current_ball_number())
 	bowling_ball.roll_over_lane(lanes[lane_index])
 	await bowling_ball.roll_finished
 	if bowling_ball.roll_hits_something: 

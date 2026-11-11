@@ -13,6 +13,7 @@
 [ext_resource type="AudioStream" uid="uid://dit3coqfc25w0" path="res://map/sounds/bowling/strike-2.ogg" id="5_na0o7"]
 [ext_resource type="PackedScene" uid="uid://q1jom8bphw8d" path="res://puzzle-framework/gameover/game_over_dialog.tscn" id="6_4dugh"]
 [ext_resource type="AudioStream" uid="uid://dtgkuva3ffdj4" path="res://map/sounds/bowling/strike-3.ogg" id="6_73k8k"]
+[ext_resource type="Script" uid="uid://dpg60n5rlnn4j" path="res://puzzle-framework/tutorial/puzzle_tutorial.gd" id="14_73k8k"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_ku88a"]
 streams_count = 3
@@ -28,13 +29,14 @@ cam = NodePath("PuzzleCamera")
 [node name="Background" parent="." unique_id=2019709945 instance=ExtResource("2_na0o7")]
 animate_ball = false
 
-[node name="PuzzleVisualizer" type="Node2D" parent="." unique_id=708301961 node_paths=PackedStringArray("bowling_ball", "bowling_ball_hover", "fake_pin", "ball_selection", "audio_strike")]
+[node name="PuzzleVisualizer" type="Node2D" parent="." unique_id=708301961 node_paths=PackedStringArray("bowling_ball", "bowling_ball_hover", "fake_pin", "ball_selection", "audio_strike", "tutorial")]
 script = ExtResource("2_3wy1v")
 bowling_ball = NodePath("BowlingBall")
 bowling_ball_hover = NodePath("BowlingBallHover")
 fake_pin = NodePath("FakePin")
 ball_selection = NodePath("../UI/BallSelection")
 audio_strike = NodePath("AudioStrike")
+tutorial = NodePath("../PuzzleTutorial")
 lane_scene = ExtResource("3_c651c")
 
 [node name="AudioStrike" type="AudioStreamPlayer2D" parent="PuzzleVisualizer" unique_id=1388379083]
@@ -70,3 +72,10 @@ allow_hint = true
 
 [node name="GameOverDialog" parent="." unique_id=1270097331 instance=ExtResource("6_4dugh")]
 allow_undo = true
+
+[node name="PuzzleTutorial" type="CanvasLayer" parent="." unique_id=781328516 node_paths=PackedStringArray("container_2d")]
+script = ExtResource("14_73k8k")
+background_anchor = Vector2(0.1, 0.5)
+background_scale = 0.25
+container_2d = NodePath("../PuzzleVisualizer")
+metadata/_custom_type_script = "uid://dpg60n5rlnn4j"

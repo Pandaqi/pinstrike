@@ -43,6 +43,7 @@ func do(cmds:PuzzleCommands) -> bool:
 	return true
 
 # CommandScatters will undo themselves, we don't need to do anything
+# @IDEA: roll the bowling ball in reverse? => no, too slow, undo should be near instant
 func undo(_cmds:PuzzleCommands) -> bool:
 	return true
 

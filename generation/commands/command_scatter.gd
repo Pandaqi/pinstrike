@@ -16,7 +16,7 @@ func _init(c:CellData, d:CellData.Direction, gen:PuzzleGenerator):
 func do(cmds:PuzzleCommands) -> bool:
 	var vis := cmds.visualizer as PuzzleVisualizer
 	var nb := cell.get_opposite_neighbor(dir)
-	var is_invalid_move : bool = (nb and nb.has_pin_at(dir)) and (not PuzzleSettings.get_difficulty_property("remove_points_if_already_occupied"))
+	var is_invalid_move : bool = (nb and nb.has_pin_at(dir)) and (not PuzzleSettings.get_difficulty_property("remove_pins_if_already_occupied"))
 	if is_invalid_move:
 		vis.bowling_ball.play_invalid_hit_sound("occupied")
 		return false

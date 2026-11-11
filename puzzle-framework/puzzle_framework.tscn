@@ -19,6 +19,7 @@
 [ext_resource type="Resource" uid="uid://bmk3s54qkkyk2" path="res://generation/settings/narrate_numbers.tres" id="15_ftmnh"]
 [ext_resource type="Resource" uid="uid://dwi3rqdt027lp" path="res://generation/settings/color_by_direction.tres" id="17_w5ts3"]
 [ext_resource type="Resource" uid="uid://d1kd82f40s8yl" path="res://generation/settings/pin_animation_speed.tres" id="18_rtetl"]
+[ext_resource type="Resource" uid="uid://c4yxd0ofkxxtb" path="res://generation/settings/enable_number_keys.tres" id="19_rwo2v"]
 
 [node name="PuzzleFramework" type="Node" unique_id=835186744]
 script = ExtResource("1_57jsw")
@@ -28,5 +29,5 @@ game_tagline = "Teaches Directions & Counting"
 favicon = "main/pinstrike-favicon.png"
 menu_scene_custom = ExtResource("2_ftmnh")
 difficulties = Array[ExtResource("3_tgv6f")]([ExtResource("2_swsbt"), ExtResource("4_swsbt"), ExtResource("5_xffpj"), ExtResource("6_tgv6f"), ExtResource("7_qky6c")])
-settings = Array[ExtResource("8_2jvrg")]([ExtResource("9_n02j5"), ExtResource("10_k0h2b"), ExtResource("11_w5xje"), ExtResource("12_ftmnh"), ExtResource("13_w5ts3"), ExtResource("14_w5xje"), ExtResource("15_ftmnh"), ExtResource("17_w5ts3"), ExtResource("18_rtetl")])
+settings = Array[ExtResource("8_2jvrg")]([ExtResource("9_n02j5"), ExtResource("10_k0h2b"), ExtResource("11_w5xje"), ExtResource("12_ftmnh"), ExtResource("13_w5ts3"), ExtResource("14_w5xje"), ExtResource("15_ftmnh"), ExtResource("17_w5ts3"), ExtResource("18_rtetl"), ExtResource("19_rwo2v")])
 bg_music = Array[AudioStream]([ExtResource("14_n02j5")])

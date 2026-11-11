@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://7a03fervi8xj" path="res://puzzle-framework/puzzle_difficulty.gd" id="1_gnrw5"]
 [ext_resource type="Script" uid="uid://dbnf0revlghrs" path="res://puzzle-framework/tutorial/puzzle_tutorial_stage.gd" id="2_lk5x5"]
+[ext_resource type="Resource" uid="uid://big2ogt5c86gg" path="res://map/tutorial/tut-easiest.tres" id="3_lk5x5"]
 
 [resource]
 script = ExtResource("1_gnrw5")
+tutorial = Array[ExtResource("2_lk5x5")]([ExtResource("3_lk5x5")])
 properties = Dictionary[String, Variant]({
 "allow_diagonals": false,
 "ball_matches_pincount_remove_all": false,

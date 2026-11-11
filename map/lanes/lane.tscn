@@ -5,7 +5,7 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kdyou"]
 
-[node name="Lane" type="Node2D" unique_id=1337726780 node_paths=PackedStringArray("area", "col_shape", "lines", "line_left", "line_right")]
+[node name="Lane" type="Node2D" unique_id=1337726780 node_paths=PackedStringArray("area", "col_shape", "lines", "line_left", "line_right", "center_marker")]
 script = ExtResource("1_4iofx")
 cell_scene = ExtResource("2_kdyou")
 area = NodePath("Area2D")
@@ -13,6 +13,7 @@ col_shape = NodePath("Area2D/CollisionShape2D")
 lines = NodePath("Lines")
 line_left = NodePath("Lines/LineLeft")
 line_right = NodePath("Lines/LineRight")
+center_marker = NodePath("CenterMarker")
 
 [node name="Lines" type="Node2D" parent="." unique_id=1838657843]
 
@@ -28,3 +29,5 @@ default_color = Color(0, 0, 0, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2116456161]
 shape = SubResource("RectangleShape2D_kdyou")
+
+[node name="CenterMarker" type="Node2D" parent="." unique_id=1550508906]

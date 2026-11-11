@@ -52,6 +52,8 @@ func roll(pos_start:Vector2, pos_end:Vector2) -> void:
 	anim_player.play("roll")
 	rolling = true
 	
+	label.hide()
+	
 	PuzzleAudio.play_audio_nice(audio_roll)
 
 	var dist := pos_start.distance_to(pos_end)
@@ -68,6 +70,8 @@ func _on_roll_finished() -> void:
 	rolling = false
 	anim_player.stop()
 	hide()
+	
+	label.show()
 	
 	particles_move.set_emitting(false)
 	particles_move.restart()
